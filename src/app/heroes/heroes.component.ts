@@ -4,6 +4,7 @@ import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
 import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
+import {heroesOpened} from "./actions";
 
 @Component({
   selector: 'app-heroes',
@@ -17,6 +18,7 @@ export class HeroesComponent implements OnInit {
 
   constructor(private heroService: HeroService,
               private readonly store: Store<{hero: {heroes: Hero[]}}>) {
+    this.store.dispatch(heroesOpened());
   }
 
   ngOnInit(): void {
