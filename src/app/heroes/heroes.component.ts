@@ -5,6 +5,8 @@ import { HeroService } from '../hero.service';
 import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
 import {heroesOpened} from "./actions";
+import {GlobalState} from "./reducer";
+import * as selectors from  './selectors';
 
 @Component({
   selector: 'app-heroes',
@@ -14,10 +16,10 @@ import {heroesOpened} from "./actions";
 export class HeroesComponent implements OnInit {
   heroes: Hero[] = [];
 
-  heroes$: Observable<Hero[]> = this.store.select(state => state.hero.heroes);
+  heroes$: Observable<Hero[] | undefined> = this.store.select(selectors.getHeroes);
 
   constructor(private heroService: HeroService,
-              private readonly store: Store<{hero: {heroes: Hero[]}}>) {
+              private readonly store: Store<GlobalState>) {
     this.store.dispatch(heroesOpened());
   }
 
@@ -26,7 +28,7 @@ export class HeroesComponent implements OnInit {
   }
 
   getHeroes(): void {
-    this.heroes$.subscribe(heroes => this.heroes = heroes);
+    this.heroes$.subscribe(heroes => this.heroes = heroes ?? []);
   }
 
   add(name: string): void {
